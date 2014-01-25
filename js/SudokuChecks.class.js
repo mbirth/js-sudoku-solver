@@ -82,7 +82,7 @@
           p = (1 << i) | (1 << j);
           console.log('Now checking (%o, %o) mask: %o', i + 1, j + 1, p);
           for (k in cells) {
-            if (cells[k].getValue() === '.' && (cells[k].getMask() & p) === p) {
+            if (cells[k].getValue() === '.' && cells[k].getMask() === p) {
               n++;
               console.log('%d: %d, %d (%o, %o)', n, p, cells[k].getMask(), p & cells[k].getMask(), (p & cells[k].getMask()) === p);
             }
@@ -93,7 +93,7 @@
           if (n === 2) {
             console.warn('Two matches!');
             for (k in cells) {
-              if (cells[k].getValue() === '.' && (cells[k].getMask() & p) === p) {
+              if (cells[k].getValue() === '.' && cells[k].getMask() === p) {
                 cells[k].setMask(p);
               } else if (cells[k].getValue() === '.') {
                 curMask = cells[k].getMask();
