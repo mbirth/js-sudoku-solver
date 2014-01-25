@@ -70,7 +70,7 @@
     };
 
     SudokuChecks.twoValPlaces = function(cells) {
-      var dim2, i, j, k, n, p, _i, _j, _ref, _ref1;
+      var curMask, dim2, i, j, k, n, newMask, p, _i, _j, _ref, _ref1;
       if (!cells[0]) {
         return;
       }
@@ -82,7 +82,7 @@
           p = (1 << i) | (1 << j);
           console.log('Now checking (%o, %o) mask: %o', i + 1, j + 1, p);
           for (k in cells) {
-            if (cells[k].getValue() === '.' && cells[k].getMask() & p === p) {
+            if (cells[k].getValue() === '.' && (cells[k].getMask() & p) === p) {
               n++;
               console.log('%d: %d, %d (%o, %o)', n, p, cells[k].getMask(), p & cells[k].getMask(), (p & cells[k].getMask()) === p);
             }
@@ -93,10 +93,14 @@
           if (n === 2) {
             console.warn('Two matches!');
             for (k in cells) {
-              if (cells[k].getValue() === '.' && cells[k].getMask() === p) {
+              if (cells[k].getValue() === '.' && (cells[k].getMask() & p) === p) {
                 cells[k].setMask(p);
               } else if (cells[k].getValue() === '.') {
-                cells[k].setMask(cells[k].getMask() & ~p);
+                curMask = cells[k].getMask();
+                console.log('Current Mask: %o', curMask);
+                newMask = curMask & ~p;
+                console.log('New Mask: %o', newMask);
+                cells[k].setMask(newMask);
               }
             }
           }

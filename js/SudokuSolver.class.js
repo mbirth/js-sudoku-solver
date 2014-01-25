@@ -165,7 +165,7 @@
           }
         }
         if (board.hasChanged()) {
-          console.info('Board was changed by "%s".', description);
+          console.info('%i. Board was changed by "%s".', i, description);
           body = document.getElementsByTagName('body');
           body[0].innerHTML += i + '. ' + description + '<br />';
           board.print();

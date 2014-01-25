@@ -56,16 +56,20 @@ class @SudokuChecks
                 p = (1 << i) | (1 << j)
                 console.log('Now checking (%o, %o) mask: %o', i+1, j+1, p)
                 for k of cells
-                    if cells[k].getValue() is '.' and cells[k].getMask() & p is p
+                    if cells[k].getValue() is '.' and (cells[k].getMask() & p) is p
                         n++
                         console.log('%d: %d, %d (%o, %o)', n, p, cells[k].getMask(), (p & cells[k].getMask()), ((p & cells[k].getMask()) is p))
                 console.info('Have %d matches.', n) if n > 0
                 if n is 2
                     console.warn('Two matches!')
                     for k of cells
-                        if cells[k].getValue() is '.' and cells[k].getMask() is p
+                        if cells[k].getValue() is '.' and (cells[k].getMask() & p) is p
                             cells[k].setMask(p)
                         else if cells[k].getValue() is '.'
-                            cells[k].setMask(cells[k].getMask() & ~p)
+                            curMask = cells[k].getMask()
+                            console.log('Current Mask: %o', curMask)
+                            newMask = curMask & ~p
+                            console.log('New Mask: %o', newMask)
+                            cells[k].setMask(newMask)
         console.groupEnd()
         return true
