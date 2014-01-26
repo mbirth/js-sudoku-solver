@@ -4,6 +4,7 @@
     function SudokuCell(initVal, boardObj) {
       this.boardObj = boardObj;
       this.changed = false;
+      this.original = false;
       this.value = 0;
       this.set = (1 << this.boardObj.dim2) - 1;
       this.setValue(initVal);
@@ -66,6 +67,14 @@
 
     SudokuCell.prototype.resetChangeFlag = function() {
       return this.changed = false;
+    };
+
+    SudokuCell.prototype.setOriginal = function(newValue) {
+      return this.original = newValue;
+    };
+
+    SudokuCell.prototype.isOriginal = function() {
+      return this.original;
     };
 
     return SudokuCell;

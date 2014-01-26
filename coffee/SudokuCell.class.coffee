@@ -2,6 +2,7 @@ class @SudokuCell
     constructor: (initVal, boardObj) ->
         @boardObj = boardObj
         @changed = false
+        @original = false
         @value = 0
         @set = (1 << @boardObj.dim2) - 1   # all
         @setValue(initVal)   # init cell
@@ -46,3 +47,10 @@ class @SudokuCell
 
     resetChangeFlag: ->
         @changed = false
+
+    setOriginal: (newValue) ->
+        @original = newValue
+
+    isOriginal: ->
+        return @original
+

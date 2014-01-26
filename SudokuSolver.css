@@ -18,6 +18,10 @@ table.sudoku td.tborder {
     border-top: 2px solid black;
 }
 
+table.sudoku td.original {
+    background-color: #ccc;
+}
+
 table.sudoku td.changed {
     background-color: #fdd;
     border: 2px solid red;

@@ -27,6 +27,7 @@ class @SudokuBoard
             r = Math.floor(i / @dim2)
             c = i % @dim2
             @board[r][c].setValue(boardString.charAt(i))
+            @board[r][c].setOriginal(true) unless boardString.charAt(i) is '.'
             @board[r][c].resetChangeFlag()
         @setCheckDiags(alsoCheckDiags)
         console.log('Board loaded.')
@@ -57,6 +58,7 @@ class @SudokuBoard
                 cssclasses.push('tborder') if r % @dim is 0
                 cssclasses.push('lborder') if c % @dim is 0
                 cssclasses.push('changed') if @cellAt(r, c).hasChanged()
+                cssclasses.push('original') if @cellAt(r, c).isOriginal()
                 value = @cellAt(r, c).getValue()
                 if value is '.'
                     value = ''

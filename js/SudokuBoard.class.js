@@ -37,6 +37,9 @@
         r = Math.floor(i / this.dim2);
         c = i % this.dim2;
         this.board[r][c].setValue(boardString.charAt(i));
+        if (boardString.charAt(i) !== '.') {
+          this.board[r][c].setOriginal(true);
+        }
         this.board[r][c].resetChangeFlag();
       }
       this.setCheckDiags(alsoCheckDiags);
@@ -82,6 +85,9 @@
           }
           if (this.cellAt(r, c).hasChanged()) {
             cssclasses.push('changed');
+          }
+          if (this.cellAt(r, c).isOriginal()) {
+            cssclasses.push('original');
           }
           value = this.cellAt(r, c).getValue();
           if (value === '.') {

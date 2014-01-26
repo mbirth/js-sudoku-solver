@@ -295,8 +295,8 @@
         'twoValPlacesColumn': 'Only two possible places for pair in column.',
         'twoValPlacesDiag': 'Only two possible places for pair in diagonale.',
         'oneUnknownAll': 'Only one possible value left.',
-        'oneColumnForValue': 'Only one possible column for value.',
-        'oneRowForValue': 'Only one possible row for value.'
+        'oneColumnForValue': 'Only one possible column in block for value.',
+        'oneRowForValue': 'Only one possible row in block for value.'
       };
       i = 1;
       while (true) {
