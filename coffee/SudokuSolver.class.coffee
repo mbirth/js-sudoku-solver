@@ -34,55 +34,55 @@ class @SudokuSolver
     @getSquareColCells: (board, squareid, squarecol) ->
         result = []
         rb = Math.floor(squareid / board.dim) * board.dim   # base row for square
-        cx = squareid % board.dim * board.dim + squarecol   # x for column
+        c = squareid % board.dim * board.dim + squarecol   # column
         for i in [0...board.dim] by 1
-            result.push(board.cellAt(cx, rb + i))
+            result.push(board.cellAt(rb + i, c))
         return result
 
     @getSquareNonColCells: (board, squareid, squarecol) ->
         result = []
         rb = Math.floor(squareid / board.dim) * board.dim   # base row for square
-        cx = squareid % board.dim * board.dim   # base x for column
+        c = squareid % board.dim * board.dim   # base column
         for i in [0...board.dim] by 1
             continue if i is squarecol
             for j in [0...board.dim] by 1
-                result.push(board.cellAt(cx + i, rb + j))
+                result.push(board.cellAt(rb + j, c + i))
         return result
 
     @getNonSquareColCells: (board, squareid, squarecol) ->
         result = []
         rb = Math.floor(squareid / board.dim) * board.dim   # base row for square
-        cx = squareid % board.dim * board.dim + squarecol   # x for column
+        c = squareid % board.dim * board.dim + squarecol   # column
         for i in [0...board.dim2] by 1
             continue if i in [rb...rb+board.dim]
-            result.push(board.cellAt(cx, i))
+            result.push(board.cellAt(i, c))
         return result
 
     @getSquareRowCells: (board, squareid, squarerow) ->
         result = []
+        r = Math.floor(squareid / board.dim) * board.dim + squarerow   # row
         cb = squareid % board.dim * board.dim   # base col for square
-        ry = Math.floor(squareid / board.dim) * board.dim + squarerow   # y for row
         for i in [0...board.dim] by 1
-            result.push(board.cellAt(cb + i, ry))
+            result.push(board.cellAt(r, cb + i))
         return result
 
     @getSquareNonRowCells: (board, squareid, squarerow) ->
         result = []
+        r = Math.floor(squareid / board.dim) * board.dim   # base row
         cb = squareid % board.dim * board.dim   # base column for square
-        ry = Math.floor(squareid / board.dim) * board.dim   # base y for row
         for i in [0...board.dim] by 1
             continue if i is squarerow
             for j in [0...board.dim] by 1
-                result.push(board.cellAt(cb + j, ry + i))
+                result.push(board.cellAt(r + i, cb + j))
         return result
 
     @getNonSquareRowCells: (board, squareid, squarerow) ->
         result = []
+        r = Math.floor(squareid / board.dim) * board.dim + squarerow   # row
         cb = squareid % board.dim * board.dim   # base col for square
-        ry = Math.floor(squareid / board.dim) * board.dim + squarerow   # y for row
         for i in [0...board.dim2] by 1
             continue if i in [cb...cb+board.dim]
-            result.push(board.cellAt(i, ry))
+            result.push(board.cellAt(r, i))
         return result
 
     @runAllRows: (board, func) ->
@@ -162,8 +162,8 @@ class @SudokuSolver
             'twoValPlacesColumn': 'Only two possible places for pair in column.'
             'twoValPlacesDiag': 'Only two possible places for pair in diagonale.'
             'oneUnknownAll': 'Only one possible value left.'
-            'oneColumnForValue': 'Only one possible column for value.'
-            'oneRowForValue': 'Only one possible row for value.'
+            'oneColumnForValue': 'Only one possible column in block for value.'
+            'oneRowForValue': 'Only one possible row in block for value.'
 
         i = 1
         while true

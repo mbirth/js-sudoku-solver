@@ -53,37 +53,37 @@
     };
 
     SudokuSolver.getSquareColCells = function(board, squareid, squarecol) {
-      var cx, i, rb, result, _i, _ref;
+      var c, i, rb, result, _i, _ref;
       result = [];
       rb = Math.floor(squareid / board.dim) * board.dim;
-      cx = squareid % board.dim * board.dim + squarecol;
+      c = squareid % board.dim * board.dim + squarecol;
       for (i = _i = 0, _ref = board.dim; _i < _ref; i = _i += 1) {
-        result.push(board.cellAt(cx, rb + i));
+        result.push(board.cellAt(rb + i, c));
       }
       return result;
     };
 
     SudokuSolver.getSquareNonColCells = function(board, squareid, squarecol) {
-      var cx, i, j, rb, result, _i, _j, _ref, _ref1;
+      var c, i, j, rb, result, _i, _j, _ref, _ref1;
       result = [];
       rb = Math.floor(squareid / board.dim) * board.dim;
-      cx = squareid % board.dim * board.dim;
+      c = squareid % board.dim * board.dim;
       for (i = _i = 0, _ref = board.dim; _i < _ref; i = _i += 1) {
         if (i === squarecol) {
           continue;
         }
         for (j = _j = 0, _ref1 = board.dim; _j < _ref1; j = _j += 1) {
-          result.push(board.cellAt(cx + i, rb + j));
+          result.push(board.cellAt(rb + j, c + i));
         }
       }
       return result;
     };
 
     SudokuSolver.getNonSquareColCells = function(board, squareid, squarecol) {
-      var cx, i, rb, result, _i, _j, _ref, _ref1, _results;
+      var c, i, rb, result, _i, _j, _ref, _ref1, _results;
       result = [];
       rb = Math.floor(squareid / board.dim) * board.dim;
-      cx = squareid % board.dim * board.dim + squarecol;
+      c = squareid % board.dim * board.dim + squarecol;
       for (i = _i = 0, _ref = board.dim2; _i < _ref; i = _i += 1) {
         if (__indexOf.call((function() {
           _results = [];
@@ -92,43 +92,43 @@
         }).apply(this), i) >= 0) {
           continue;
         }
-        result.push(board.cellAt(cx, i));
+        result.push(board.cellAt(i, c));
       }
       return result;
     };
 
     SudokuSolver.getSquareRowCells = function(board, squareid, squarerow) {
-      var cb, i, result, ry, _i, _ref;
+      var cb, i, r, result, _i, _ref;
       result = [];
+      r = Math.floor(squareid / board.dim) * board.dim + squarerow;
       cb = squareid % board.dim * board.dim;
-      ry = Math.floor(squareid / board.dim) * board.dim + squarerow;
       for (i = _i = 0, _ref = board.dim; _i < _ref; i = _i += 1) {
-        result.push(board.cellAt(cb + i, ry));
+        result.push(board.cellAt(r, cb + i));
       }
       return result;
     };
 
     SudokuSolver.getSquareNonRowCells = function(board, squareid, squarerow) {
-      var cb, i, j, result, ry, _i, _j, _ref, _ref1;
+      var cb, i, j, r, result, _i, _j, _ref, _ref1;
       result = [];
+      r = Math.floor(squareid / board.dim) * board.dim;
       cb = squareid % board.dim * board.dim;
-      ry = Math.floor(squareid / board.dim) * board.dim;
       for (i = _i = 0, _ref = board.dim; _i < _ref; i = _i += 1) {
         if (i === squarerow) {
           continue;
         }
         for (j = _j = 0, _ref1 = board.dim; _j < _ref1; j = _j += 1) {
-          result.push(board.cellAt(cb + j, ry + i));
+          result.push(board.cellAt(r + i, cb + j));
         }
       }
       return result;
     };
 
     SudokuSolver.getNonSquareRowCells = function(board, squareid, squarerow) {
-      var cb, i, result, ry, _i, _j, _ref, _ref1, _results;
+      var cb, i, r, result, _i, _j, _ref, _ref1, _results;
       result = [];
+      r = Math.floor(squareid / board.dim) * board.dim + squarerow;
       cb = squareid % board.dim * board.dim;
-      ry = Math.floor(squareid / board.dim) * board.dim + squarerow;
       for (i = _i = 0, _ref = board.dim2; _i < _ref; i = _i += 1) {
         if (__indexOf.call((function() {
           _results = [];
@@ -137,7 +137,7 @@
         }).apply(this), i) >= 0) {
           continue;
         }
-        result.push(board.cellAt(i, ry));
+        result.push(board.cellAt(r, i));
       }
       return result;
     };
