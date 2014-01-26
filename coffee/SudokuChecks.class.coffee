@@ -49,7 +49,7 @@ class @SudokuChecks
     @twoValPlaces: (cells) ->
         return if not cells[0]
         dim2 = cells[0].boardObj.dim2
-        console.group('twoValPlaces: (%o) %o', dim2, cells)
+        console.groupCollapsed('twoValPlaces: (%o) %o', dim2, cells)
         for i in [0...dim2-1] by 1   # walk all possible 2s combinations
             for j in [i+1...dim2] by 1
                 n = 0
@@ -73,3 +73,27 @@ class @SudokuChecks
                             cells[k].setMask(newMask)
         console.groupEnd()
         return true
+
+    @rowMatch: (blockSubject, blockRest, lineRest) ->
+        # aaabbbccc ... if bbb is only possibility for one num (check rest of block!), remove from aaa and ccc
+        return if not blockSubject[0] or not blockRest[0] or not lineRest[0]
+        console.groupCollapsed('rowMatch: %o, %o, %o', blockSubject, blockRest, lineRest)
+        for i in [0...blockSubject[0].boardObj.dim2] by 1   # walk all possible values
+            p = (1 << i)
+            isInSubject = false
+            isInRest = false
+            # test if number is in subject
+            for j of blockSubject
+                if blockSubject[j].getValue() is '.' and (p & blockSubject[j].getMask())
+                    isInSubject = true
+                    break
+            # test if number is in rest of square
+            for j of blockRest
+                if blockRest[j].getValue() is '.' and (p & blockRest[j].getMask())
+                    isInRest = true
+                    break
+            # if only in subject, remove candidate from rest
+            if isInSubject and not isInRest
+                for j of lineRest
+                    lineRest[j].setMask(lineRest[j].getMask() & ~p)
+        console.groupEnd()

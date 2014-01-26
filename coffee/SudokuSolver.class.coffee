@@ -31,6 +31,60 @@ class @SudokuSolver
             result.push(board.cellAt(i, col))
         return result
 
+    @getSquareColCells: (board, squareid, squarecol) ->
+        result = []
+        rb = Math.floor(squareid / board.dim) * board.dim   # base row for square
+        cx = squareid % board.dim * board.dim + squarecol   # x for column
+        for i in [0...board.dim] by 1
+            result.push(board.cellAt(cx, rb + i))
+        return result
+
+    @getSquareNonColCells: (board, squareid, squarecol) ->
+        result = []
+        rb = Math.floor(squareid / board.dim) * board.dim   # base row for square
+        cx = squareid % board.dim * board.dim   # base x for column
+        for i in [0...board.dim] by 1
+            continue if i is squarecol
+            for j in [0...board.dim] by 1
+                result.push(board.cellAt(cx + i, rb + j))
+        return result
+
+    @getNonSquareColCells: (board, squareid, squarecol) ->
+        result = []
+        rb = Math.floor(squareid / board.dim) * board.dim   # base row for square
+        cx = squareid % board.dim * board.dim + squarecol   # x for column
+        for i in [0...board.dim2] by 1
+            continue if i in [rb...rb+board.dim]
+            result.push(board.cellAt(cx, i))
+        return result
+
+    @getSquareRowCells: (board, squareid, squarerow) ->
+        result = []
+        cb = squareid % board.dim * board.dim   # base col for square
+        ry = Math.floor(squareid / board.dim) * board.dim + squarerow   # y for row
+        for i in [0...board.dim] by 1
+            result.push(board.cellAt(cb + i, ry))
+        return result
+
+    @getSquareNonRowCells: (board, squareid, squarerow) ->
+        result = []
+        cb = squareid % board.dim * board.dim   # base column for square
+        ry = Math.floor(squareid / board.dim) * board.dim   # base y for row
+        for i in [0...board.dim] by 1
+            continue if i is squarerow
+            for j in [0...board.dim] by 1
+                result.push(board.cellAt(cb + j, ry + i))
+        return result
+
+    @getNonSquareRowCells: (board, squareid, squarerow) ->
+        result = []
+        cb = squareid % board.dim * board.dim   # base col for square
+        ry = Math.floor(squareid / board.dim) * board.dim + squarerow   # y for row
+        for i in [0...board.dim2] by 1
+            continue if i in [cb...cb+board.dim]
+            result.push(board.cellAt(i, ry))
+        return result
+
     @runAllRows: (board, func) ->
         for i in [0...board.dim2] by 1    # walk all rows
             rowcells = @getRowCells(board, i)
@@ -56,6 +110,28 @@ class @SudokuSolver
         SudokuChecks[func](diag1)
         SudokuChecks[func](diag2)
 
+    @runSpecialColumns: (board, func) ->
+        blockCol = []
+        blockRest = []
+        colRest = []
+        for s in [0...board.dim2] by 1   # walk all squares
+            for c in [0...board.dim] by 1   # walk all square columns
+                blockCol = @getSquareColCells(board, s, c)
+                blockRest = @getSquareNonColCells(board, s, c)
+                colRest = @getNonSquareColCells(board, s, c)
+                SudokuChecks[func](blockCol, blockRest, colRest)
+
+    @runSpecialRows: (board, func) ->
+        blockRow = []
+        blockRest = []
+        rowRest = []
+        for s in [0...board.dim2] by 1   # walk all squares
+            for r in [0...board.dim] by 1   # walk all square rows
+                blockRow = @getSquareRowCells(board, s, r)
+                blockRest = @getSquareNonRowCells(board, s, r)
+                rowRest = @getNonSquareRowCells(board, s, r)
+                SudokuChecks[func](blockRow, blockRest, rowRest)
+
     @oneUnknownAll: (board) ->
         cells = []
         for r in [0...board.dim2] by 1
@@ -71,6 +147,8 @@ class @SudokuSolver
     @twoValPlacesRow: (board) -> @runAllRows(board, 'twoValPlaces')
     @twoValPlacesColumn: (board) -> @runAllColumns(board, 'twoValPlaces')
     @twoValPlacesDiag: (board) -> @runBothDiags(board, 'twoValPlaces')
+    @oneColumnForValue: (board) -> @runSpecialColumns(board, 'rowMatch')
+    @oneRowForValue: (board) -> @runSpecialRows(board, 'rowMatch')
 
     @solveBoard: (board) ->
         checks =
@@ -84,6 +162,8 @@ class @SudokuSolver
             'twoValPlacesColumn': 'Only two possible places for pair in column.'
             'twoValPlacesDiag': 'Only two possible places for pair in diagonale.'
             'oneUnknownAll': 'Only one possible value left.'
+            'oneColumnForValue': 'Only one possible column for value.'
+            'oneRowForValue': 'Only one possible row for value.'
 
         i = 1
         while true

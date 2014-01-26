@@ -75,7 +75,7 @@
         return;
       }
       dim2 = cells[0].boardObj.dim2;
-      console.group('twoValPlaces: (%o) %o', dim2, cells);
+      console.groupCollapsed('twoValPlaces: (%o) %o', dim2, cells);
       for (i = _i = 0, _ref = dim2 - 1; _i < _ref; i = _i += 1) {
         for (j = _j = _ref1 = i + 1; _j < dim2; j = _j += 1) {
           n = 0;
@@ -108,6 +108,37 @@
       }
       console.groupEnd();
       return true;
+    };
+
+    SudokuChecks.rowMatch = function(blockSubject, blockRest, lineRest) {
+      var i, isInRest, isInSubject, j, p, _i, _ref;
+      if (!blockSubject[0] || !blockRest[0] || !lineRest[0]) {
+        return;
+      }
+      console.groupCollapsed('rowMatch: %o, %o, %o', blockSubject, blockRest, lineRest);
+      for (i = _i = 0, _ref = blockSubject[0].boardObj.dim2; _i < _ref; i = _i += 1) {
+        p = 1 << i;
+        isInSubject = false;
+        isInRest = false;
+        for (j in blockSubject) {
+          if (blockSubject[j].getValue() === '.' && (p & blockSubject[j].getMask())) {
+            isInSubject = true;
+            break;
+          }
+        }
+        for (j in blockRest) {
+          if (blockRest[j].getValue() === '.' && (p & blockRest[j].getMask())) {
+            isInRest = true;
+            break;
+          }
+        }
+        if (isInSubject && !isInRest) {
+          for (j in lineRest) {
+            lineRest[j].setMask(lineRest[j].getMask() & ~p);
+          }
+        }
+      }
+      return console.groupEnd();
     };
 
     return SudokuChecks;
